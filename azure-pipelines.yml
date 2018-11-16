@@ -18,7 +18,7 @@ steps:
 
   - task: Npm@1
     # only execute this task when the sourceBranch is a new release
-    condition: startsWith(variables['build.sourceBranch'], 'refs/tags/*')
+    condition: startsWith(variables['build.sourceBranch'], 'refs/tags/')
     inputs:
       command: publish
       publishEndpoint: npmjs.com
