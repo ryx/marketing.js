@@ -17,7 +17,7 @@ steps:
     displayName: 'Npm install and test'
 
   - task: Npm@1
-    condition: and(succeeded('Test'), eq(variables['build.sourceBranch'], 'refs/tags/*'))
+    condition: eq(variables['build.sourceBranch'], 'refs/tags/*')
     inputs:
       command: publish
       publishEndpoint: npmjs.com
