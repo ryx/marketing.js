@@ -45,11 +45,6 @@
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2"
   },
-  "dependencies": {
-    "babel-core": "^7.0.0-bridge.0",
-    "intersection-observer": "^0.5.1",
-    "promise": "^8.0.2"
-  },
   "jest": {
     "testEnvironment": "jest-environment-jsdom-global"
   }
