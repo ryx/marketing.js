@@ -1,6 +1,6 @@
-# Build and publish a node.js-based library in two jobs. Only attempt to
-# publish anyhting to npm if the first job succeeded (so the build was ok)
-# and a new tag was found.
+# Build and publish a node.js-based library from a github repository. Only
+# publish anything to npm if the tests succeeded (so the build was ok)
+# and the build is spawned from a new release in github.
 
 pool:
   vmImage: 'Ubuntu 16.04'
@@ -17,11 +17,8 @@ steps:
     displayName: 'Npm install and test'
 
   - task: Npm@1
-    # condition: eq(variables['build.sourceBranch'], 'refs/tags/*')
-    trigger:
-      branches:
-        include:
-        - refs/tags/*
+    # only execute this task when the sourceBranch is a new release
+    condition: startsWith(variables['build.sourceBranch'], 'refs/tags/*')
     inputs:
       command: publish
       publishEndpoint: npmjs.com
