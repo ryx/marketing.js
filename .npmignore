@@ -1,0 +1,14 @@
+.vscode
+.github
+coverage
+examples
+node_modules
+*.spec.js
+test
+.babelrc
+.eslintignore
+.eslintrc
+.gitignore
+.travis.yml
+webpack.config.js
+TODO.txt
