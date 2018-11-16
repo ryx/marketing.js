@@ -17,3 +17,8 @@ steps:
     npm run test
     npm run build
   displayName: 'npm install, test, and build'
+
+- task: Npm@1
+  inputs:
+    command: publish
+    publishEndpoint: npmjs.com
