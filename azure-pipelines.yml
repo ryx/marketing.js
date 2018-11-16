@@ -17,7 +17,11 @@ steps:
     displayName: 'Npm install and test'
 
   - task: Npm@1
-    condition: eq(variables['build.sourceBranch'], 'refs/tags/*')
+    # condition: eq(variables['build.sourceBranch'], 'refs/tags/*')
+    trigger:
+      branches:
+        include:
+        - refs/tags/*
     inputs:
       command: publish
       publishEndpoint: npmjs.com
