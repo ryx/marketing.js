@@ -30,7 +30,7 @@ const model = new LastTouchAttributionModel();
 Then we create the engine and pass our model and the marketing channel configuration. The channel configuration - when seen from a technical perspective - is quite simple and straightforward. It simply defines a set of rules that are executed sequentially to match against certain environment criteria. Nevertheless the entire business logic around marketing channels and attribution handling can be quite complex and requires a bit of background knowledge.
 
 ```javascript
-const engine = new AttributionEngine.init(model, [
+const engine = new AttributionEngine(model, [
   new SearchEngineChannel('seo', 'SEO'),
   new URLMatchingChannel('sea', 'SEA (Adwords)', 'adword', 'adword'),
 ]);
