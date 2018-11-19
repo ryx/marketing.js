@@ -483,24 +483,48 @@ describe('marketingattribution.js', () => {
   });
 
   describe('AttributionEngine', () => {
-    it('should initialize with a given configuration and return the current channel', () => {
-      setDocumentLocation('http://example.com?adword=/foo/bar/123&foo=bar&bla=blubb');
-      const engine = new AttributionEngine(
-        new LastTouchAttributionModel(60 * 60 * 24 * 30),
-        [
-          new URLMatchingChannel('sea', 'SEA (adwords)', 'adword', 'adword'),
-        ],
-        60 * 30, // 30min
-        '__mcajs',
-      );
+    describe('pattern matching', () => {
+      let engine;
 
-      const touchpoint = engine.execute();
+      beforeEach(() => {
+        engine = new AttributionEngine(
+          new LastTouchAttributionModel(60 * 60 * 24 * 30),
+          [
+            new URLMatchingChannel('sea', 'SEA (js)', 'adword', 'adword', { canOverwrite: true }),
+            new SearchEngineChannel('seo', 'SEO (js)', { canOverwrite: true }),
+            new URLMatchingChannel('newsletter', 'E-Mail Marketing (js)', 'newsletter', 'newsletter', { canOverwrite: true }),
+            new URLMatchingChannel('dis', 'Display Advertising (js)', { emsrc: 'dis' }, 'refID', { canOverwrite: true }),
+            new URLMatchingChannel('smo', 'Social Media (js)', { emsrc: 'smo' }, 'refID', { canOverwrite: true }),
+            new URLMatchingChannel('aff', 'Affiliate (js)', { emsrc: 'aff' }, 'refID', { canOverwrite: true }),
+            new URLMatchingChannel('koop', 'Cooperation (js)', { emsrc: 'koop' }, 'refID', { canOverwrite: true }),
+            new URLMatchingChannel('surl', 'Other Campaigns (No Override) (js)', { emsrc: 'surl' }, 'refID'),
+            new URLMatchingChannel('noCampaign', 'Unknown Campaign (js)', { emsrc: true }, false),
+            new ReferrerMatchingChannel('direct', 'Direct (js)', /^$/gi, { isfirstViewOnly: true }),
+            new ReferrerMatchingChannel('noChannel', 'Unknown Channel (js)', { refID: true }),
+          ],
+          60 * 30, // 30min
+          '__mcajs',
+        );
+      });
 
-      expect(touchpoint).toBeInstanceOf(Touchpoint);
-      expect(touchpoint.getChannel()).toBeInstanceOf(URLMatchingChannel);
-      expect(touchpoint.getChannel().getId()).toBe('sea');
-      expect(touchpoint.getChannel().getLabel()).toBe('SEA (adwords)');
-      expect(touchpoint.getValue()).toBe('/foo/bar/123');
+      it('should initialize with a given configuration and return the current channel', () => {
+        setDocumentLocation('http://example.com?adword=/foo/bar/123&foo=bar&bla=blubb');
+
+        const touchpoint = engine.execute();
+
+        expect(touchpoint).toBeInstanceOf(Touchpoint);
+        expect(touchpoint.getChannel()).toBeInstanceOf(URLMatchingChannel);
+        expect(touchpoint.getChannel().getId()).toBe('sea');
+        // expect(touchpoint.getChannel().getLabel()).toBe('SEA (adwords)');
+        expect(touchpoint.getValue()).toBe('/foo/bar/123');
+      });
+
+      it('should match the correct channel if multiple channels match', () => {
+        setDocumentReferrer('https://www.google.de?q=test');
+        setDocumentLocation('http://example.com');
+
+        expect(engine.execute().getChannel().getId()).toEqual('seo');
+      });
     });
 
     describe('constructor:', () => {
