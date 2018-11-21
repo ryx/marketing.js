@@ -6,6 +6,8 @@
 A highly flexible marketingchannel recognition and attribution library. Records a visitor's touchpoints, provides access to the touchpoint history and offers attribution models to operate on the recorded data.
 
 ## Usage
+
+### Installation
 Install the library from npm as usual. It has no external dependencies and should work in all modern browsers.
 
     npm install marketing.js
@@ -27,7 +29,8 @@ After that, create a simple `AttributionModel` instance. This is used to decide 
 const model = new LastTouchAttributionModel();
 ```
 
-Then we create the engine and pass our model and the marketing channel configuration. The channel configuration - when seen from a technical perspective - is quite simple and straightforward. It simply defines a set of rules that are executed sequentially to match against certain environment criteria. Nevertheless the entire business logic around marketing channels and attribution handling can be quite complex and requires a bit of background knowledge.
+### Configuration
+Create the engine and pass the model and the marketing channel configuration. The channel configuration - when seen from a technical perspective - is quite simple and straightforward. It simply defines a set of rules that are executed sequentially to match against certain environment criteria. Nevertheless the entire business logic around marketing channels and attribution handling can be quite complex and requires a bit of background knowledge.
 
 ```javascript
 const engine = new AttributionEngine(model, [
@@ -36,14 +39,15 @@ const engine = new AttributionEngine(model, [
 ]);
 ```
 
-However, we are now set up to get the touchpoint for the current page impression ba calling the engine's `execute` method. This looks at URL, query string and referrer (depending on the types of channels in the configuration) and performs the channel recognition. It also adds the recognized `Touchpoint` to the internal list with the touchpoint history.
+### Execution
+Now everything is set up to get the touchpoint for the current page impression by calling the engine's `execute` method. This looks at URL, query string and referrer (depending on the types of channels in the configuration) and performs the channel recognition. It also adds the recognized `Touchpoint` to the internal list with the touchpoint history.
 
 ```javascript
 const currentTouchpoint = engine.execute();
 console.log(currentTouchpoint.getChannel().getId());
 ```
 
-Finally, we can query the attributed `Touchpoint`(s) for the visitor based on our chosen `LastTouchAttributionModel` (looks at the single winning channel within the last 30 days). Note that this method returns an array of `AttributionItem` objects because we need to provide a `Touchpoint` and its associate `weight` on the attribution. Also we need any array here, as some attribution models may attribute multiple channels (e.g. "linear" or "time decay" models).
+Finally, we can query the attributed `Touchpoint`(s) for the visitor, based on our chosen `LastTouchAttributionModel` (looks at the single winning channel within the last 30 days). Note that this method returns an array of `AttributionItem` objects because we need to provide a `Touchpoint` and its associated `weight` on the attribution. Also we need an array here, as some attribution models may attribute multiple channels (e.g. "linear" or "time decay" models).
 
 ```javascript
 const attributionItems = engine.getAttributionItems();
@@ -59,4 +63,4 @@ const attributionItems = model.execute(engine.getTouchpointHistory());
 ```
 
 ## API
-Check the code for inline JSDOC comments
+Coming soon, check the code for inline JSDOC comments until then ...
