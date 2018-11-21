@@ -431,13 +431,8 @@ export class AttributionEngine {
 
     // fetch channel history and "last touch" timestamp from storage
     const data = storageRead(this.cookieName);
-    try {
-      const json = JSON.parse(data);
-      if (json) {
-        this.restoreFromData(json);
-      }
-    } catch (e) {
-      // ...
+    if (data) {
+      this.restoreFromData(data);
     }
   }
 
@@ -483,7 +478,7 @@ export class AttributionEngine {
     this.lastTouchTimestamp = curTime;
 
     // update data in storage
-    storageWrite(this.cookieName, JSON.stringify(this.saveToData()));
+    storageWrite(this.cookieName, this.saveToData());
 
     return recognizedTouchpoint;
   }
