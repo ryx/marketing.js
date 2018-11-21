@@ -1,6 +1,6 @@
 {
   "name": "marketing.js",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "A flexible marketingchannel recognition and attribution library for the browser",
   "author": "Rico Pfaus",
   "license": "MIT",
